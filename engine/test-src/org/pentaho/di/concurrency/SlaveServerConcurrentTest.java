@@ -90,7 +90,7 @@ public class SlaveServerConcurrentTest {
   }
 
   private List<Getter> generateGetters( AtomicBoolean condition ) {
-    List<Getter> consistencyCheckers = new ArrayList<>();
+    List<Getter> consistencyCheckers = new ArrayList<Getter>();
 
     for ( int i = 0; i < NUMBER_OF_GETTERS; i++ ) {
       consistencyCheckers.add( new Getter( condition ) );
@@ -100,7 +100,7 @@ public class SlaveServerConcurrentTest {
   }
 
   private List<Replacer> generateReplacers( AtomicBoolean condition ) {
-    List<Replacer> replacers = new ArrayList<>();
+    List<Replacer> replacers = new ArrayList<Replacer>();
 
     for ( int i = 0; i < NUMBER_OF_REPLACES; i++ ) {
       replacers.add( new Replacer( condition ) );

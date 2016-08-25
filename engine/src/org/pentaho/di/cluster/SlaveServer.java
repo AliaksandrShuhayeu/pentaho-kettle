@@ -251,22 +251,27 @@ public class SlaveServer extends ChangedFlag implements Cloneable, SharedObjectI
     StringBuilder xml = new StringBuilder();
 
     xml.append( "<" ).append( XML_TAG ).append( ">" );
+    lock.readLock().lock();
+    try {
+      xml.append( XMLHandler.addTagValue( "name", name, false ) );
+      xml.append( XMLHandler.addTagValue( "hostname", hostname, false ) );
+      xml.append( XMLHandler.addTagValue( "port", port, false ) );
+      xml.append( XMLHandler.addTagValue( "webAppName", webAppName, false ) );
+      xml.append( XMLHandler.addTagValue( "username", username, false ) );
+      xml.append( XMLHandler.addTagValue( "password", Encr.encryptPasswordIfNotUsingVariables( password ), false ) );
+      xml.append( XMLHandler.addTagValue( "proxy_hostname", proxyHostname, false ) );
+      xml.append( XMLHandler.addTagValue( "proxy_port", proxyPort, false ) );
+      xml.append( XMLHandler.addTagValue( "non_proxy_hosts", nonProxyHosts, false ) );
+      xml.append( XMLHandler.addTagValue( "master", master, false ) );
+      xml.append( XMLHandler.addTagValue( SSL_MODE_TAG, isSslMode(), false ) );
 
-    xml.append( XMLHandler.addTagValue( "name", name, false ) );
-    xml.append( XMLHandler.addTagValue( "hostname", hostname, false ) );
-    xml.append( XMLHandler.addTagValue( "port", port, false ) );
-    xml.append( XMLHandler.addTagValue( "webAppName", webAppName, false ) );
-    xml.append( XMLHandler.addTagValue( "username", username, false ) );
-    xml.append( XMLHandler.addTagValue( "password", Encr.encryptPasswordIfNotUsingVariables( password ), false ) );
-    xml.append( XMLHandler.addTagValue( "proxy_hostname", proxyHostname, false ) );
-    xml.append( XMLHandler.addTagValue( "proxy_port", proxyPort, false ) );
-    xml.append( XMLHandler.addTagValue( "non_proxy_hosts", nonProxyHosts, false ) );
-    xml.append( XMLHandler.addTagValue( "master", master, false ) );
-    xml.append( XMLHandler.addTagValue( SSL_MODE_TAG, isSslMode(), false ) );
-    if ( sslConfig != null ) {
-      xml.append( sslConfig.getXML() );
+      if ( sslConfig != null ) {
+        xml.append( sslConfig.getXML() );
+      }
+
+    } finally {
+      lock.readLock().unlock();
     }
-
     xml.append( "</" ).append( XML_TAG ).append( ">" );
 
     return xml.toString();
@@ -818,7 +823,7 @@ public class SlaveServer extends ChangedFlag implements Cloneable, SharedObjectI
   }
 
   public String execService( String service ) throws Exception {
-    return execService( service, new HashMap<>() );
+    return execService( service, new HashMap<String, String>() );
   }
 
   // Method is defined as package-protected in order to be accessible by unit tests
