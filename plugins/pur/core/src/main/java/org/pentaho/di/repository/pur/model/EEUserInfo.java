@@ -1,5 +1,5 @@
 /*!
- * Copyright 2010 - 2015 Pentaho Corporation.  All rights reserved.
+ * Copyright 2010 - 2017 Pentaho Corporation.  All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,7 @@ public class EEUserInfo extends UserInfo implements IEEUser, java.io.Serializabl
     this.roles = new HashSet<IRole>();
   }
 
-  public EEUserInfo( String login, String password, String username, String description, boolean enabled,
-      Set<IRole> roles ) {
+  public EEUserInfo( String login, String password, String username, String description, boolean enabled, Set<IRole> roles ) {
     super( login, password, username, description, enabled );
     this.roles = roles;
   }
