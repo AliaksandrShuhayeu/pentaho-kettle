@@ -2,7 +2,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2016 by Pentaho : http://www.pentaho.com
+ * Copyright (C) 2002-2017 by Pentaho : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -105,5 +105,19 @@ public class StreamLookupMetaTest implements InitializerInterface<StepMetaInterf
     assertEquals( stepName, cloned.getStepIOMeta().getInfoStreams().get( 0 ).getStepname() );
     assertNotSame( meta.getStepIOMeta().getInfoStreams().get( 0 ),
       cloned.getStepIOMeta().getInfoStreams().get( 0 ) );
+  }
+
+  @Test
+  public void testGetXML() {
+    StreamLookupMeta streamLookupMeta = new StreamLookupMeta();
+    streamLookupMeta.setKeystream( new String[] { "testKeyStreamValue" } );
+    streamLookupMeta.setKeylookup( new String[] { "testKeyLookupValue" } );
+    streamLookupMeta.setValue( new String[] { "testValue" } );
+    streamLookupMeta.setValueName( new String[] {} );
+    streamLookupMeta.setValueDefault( new String[] {} );
+    streamLookupMeta.setValueDefaultType( new int[] {} );
+
+    //run without exception
+    streamLookupMeta.getXML();
   }
 }

@@ -2,7 +2,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2016 by Pentaho : http://www.pentaho.com
+ * Copyright (C) 2002-2017 by Pentaho : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -266,10 +266,16 @@ public class StreamLookupMeta extends BaseStepMeta implements StepMetaInterface 
     for ( int i = 0; i < getValue().length; i++ ) {
       retval.append( "      <value>" ).append( Const.CR );
       retval.append( "        " ).append( XMLHandler.addTagValue( "name", getValue()[i] ) );
-      retval.append( "        " ).append( XMLHandler.addTagValue( "rename", getValueName()[i] ) );
-      retval.append( "        " ).append( XMLHandler.addTagValue( "default", getValueDefault()[i] ) );
-      retval.append( "        " ).append(
-          XMLHandler.addTagValue( "type", ValueMetaFactory.getValueMetaName( getValueDefaultType()[i] ) ) );
+      if ( getValueName().length > i ) {
+        retval.append( "        " ).append( XMLHandler.addTagValue( "rename", getValueName()[ i ] ) );
+      }
+      if ( getValueDefault().length > i ) {
+        retval.append( "        " ).append( XMLHandler.addTagValue( "default", getValueDefault()[ i ] ) );
+      }
+      if ( getValueDefaultType().length > i ) {
+        retval.append( "        " ).append(
+          XMLHandler.addTagValue( "type", ValueMetaFactory.getValueMetaName( getValueDefaultType()[ i ] ) ) );
+      }
       retval.append( "      </value>" ).append( Const.CR );
     }
     retval.append( "    </lookup>" ).append( Const.CR );

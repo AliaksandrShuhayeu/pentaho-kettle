@@ -2,7 +2,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2016 by Pentaho : http://www.pentaho.com
+ * Copyright (C) 2002-2017 by Pentaho : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -28,8 +28,10 @@ import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.junit.Assert;
+import org.mockito.Mockito;
 import org.pentaho.di.core.row.ValueMetaInterface;
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +52,8 @@ import org.pentaho.di.trans.step.errorhandling.StreamIcon;
 import org.pentaho.di.trans.step.errorhandling.StreamInterface;
 import org.pentaho.di.trans.steps.mock.StepMockHelper;
 import org.pentaho.metastore.api.IMetaStore;
+
+import java.lang.reflect.Method;
 
 /**
  * Test for StreamLookup step
@@ -230,5 +234,22 @@ public class StreamLookupTest {
   @Test
   public void testMemoryPreservationWithBinaryStreams() throws KettleException {
     doTest( true, false, true );
+  }
+
+  @Test
+  public void testHandleNullIf() throws Exception {
+
+    StreamLookup streamLookup = new StreamLookup( smh.stepMeta, smh.stepDataInterface, 0, smh.transMeta, smh.trans );
+    streamLookup.init( smh.initStepMetaInterface, smh.initStepDataInterface );
+
+    Mockito.when( smh.initStepMetaInterface.getValue() ).thenReturn( new String[] { "testValue" } );
+    Mockito.when( smh.initStepMetaInterface.getValueDefaultType() ).thenReturn( new int[] {} );
+    Mockito.when( smh.initStepMetaInterface.getValueDefault() ).thenReturn( new String[] {} );
+
+    Method handleNullIfMethod = StreamLookup.class.getDeclaredMethod( "handleNullIf" );
+    handleNullIfMethod.setAccessible( true );
+    handleNullIfMethod.invoke( streamLookup );
+
+    Assert.assertNull( smh.initStepDataInterface.nullIf[ 0 ] );
   }
 }

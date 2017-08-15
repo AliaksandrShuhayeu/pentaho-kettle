@@ -2,7 +2,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2016 by Pentaho : http://www.pentaho.com
+ * Copyright (C) 2002-2017 by Pentaho : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -71,14 +71,20 @@ public class StreamLookup extends BaseStep implements StepInterface {
     data.nullIf = new Object[meta.getValue().length];
 
     for ( int i = 0; i < meta.getValue().length; i++ ) {
-      if ( meta.getValueDefaultType()[i] < 0 ) {
-        //CHECKSTYLE:Indentation:OFF
-        meta.getValueDefaultType()[i] = ValueMetaInterface.TYPE_STRING;
+      int valueDefaultType;
+      if ( meta.getValueDefaultType().length > i ) {
+        if ( meta.getValueDefaultType()[ i ] < 0 ) {
+          //CHECKSTYLE:Indentation:OFF
+          meta.getValueDefaultType()[ i ] = ValueMetaInterface.TYPE_STRING;
+        }
+        valueDefaultType = meta.getValueDefaultType()[i];
+      } else {
+        valueDefaultType = ValueMetaInterface.TYPE_STRING;
       }
       data.nullIf[i] = null;
-      switch ( meta.getValueDefaultType()[i] ) {
+      switch ( valueDefaultType ) {
         case ValueMetaInterface.TYPE_STRING:
-          if ( Utils.isEmpty( meta.getValueDefault()[i] ) ) {
+          if ( meta.getValueDefault().length <= i || Utils.isEmpty( meta.getValueDefault()[i] ) ) {
             data.nullIf[i] = null;
           } else {
             data.nullIf[i] = meta.getValueDefault()[i];
